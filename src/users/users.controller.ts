@@ -1,4 +1,11 @@
-import { Body, Controller, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -30,7 +37,7 @@ export class UsersController {
     await this.usersService.create(createUserDto);
   }
 
-  @Patch()
+  @Patch(':id')
   @Roles(Role.ADMIN)
   @ApiOkResponse({ description: 'User updated' })
   @ApiBadRequestResponse({
@@ -38,7 +45,10 @@ export class UsersController {
   })
   @ApiUnauthorizedResponse({ description: 'User not logged in' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
-  async updateUser(@Body() updateUserDto: UpdateUserDto) {
-    await this.usersService.update(updateUserDto.username, updateUserDto);
+  async updateUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    await this.usersService.update(id, updateUserDto);
   }
 }

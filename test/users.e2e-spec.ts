@@ -19,9 +19,9 @@ describe('User controller (e2e)', () => {
   };
   const jhondoe = {
     username: 'jhondoe',
-    password: 'strongpassword',
+    password: 'password',
     role: Role.USER,
-    name: 'Steve',
+    name: 'User',
   };
 
   beforeAll(async () => {
@@ -35,13 +35,13 @@ describe('User controller (e2e)', () => {
     userAccessToken = (
       await request(app.getHttpServer())
         .post('/auth/login')
-        .send({ username: 'jhondoe', password: 'password' })
+        .send({ username: 'user', password: 'user' })
     ).body.access_token;
 
     adminAccessToken = (
       await request(app.getHttpServer())
         .post('/auth/login')
-        .send({ username: 'janedoe', password: 'drowssap' })
+        .send({ username: 'admin', password: 'admin' })
     ).body.access_token;
   });
 
@@ -66,6 +66,10 @@ describe('User controller (e2e)', () => {
   });
 
   it('Create user conflict', async () => {
+    await request(app.getHttpServer())
+      .post('/users')
+      .auth(adminAccessToken, { type: 'bearer' })
+      .send(jhondoe);
     return request(app.getHttpServer())
       .post('/users')
       .auth(adminAccessToken, { type: 'bearer' })
@@ -75,18 +79,27 @@ describe('User controller (e2e)', () => {
 
   it('Update user', async () => {
     return request(app.getHttpServer())
-      .patch('/users')
+      .patch('/users/1')
       .auth(adminAccessToken, { type: 'bearer' })
-      .send(jhondoe)
+      .send({ username: 'updated' })
       .expect(200);
   });
 
   it('Update user not found', async () => {
     return await request(app.getHttpServer())
-      .patch('/users')
+      .patch('/users/9999')
       .auth(adminAccessToken, { type: 'bearer' })
       .send({ username: 'carla' })
       .expect(404);
+  });
+
+  it('Update user conflict', async () => {
+    return await request(app.getHttpServer())
+      .patch('/users/1')
+      .auth(adminAccessToken, { type: 'bearer' })
+
+      .send({ username: 'admin' })
+      .expect(409);
   });
 
   afterAll(async () => {

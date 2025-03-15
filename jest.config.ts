@@ -13,8 +13,12 @@ export default {
   collectCoverageFrom: ['src/**/*.(t|j)s'],
   coverageDirectory: '../coverage',
   testEnvironment: 'node',
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
-    prefix: '<rootDir>/',
-  }),
+  moduleNameMapper: {
+    ...pathsToModuleNameMapper(compilerOptions.paths, {
+      prefix: '<rootDir>/',
+    }),
+    '^lodash-es$': 'lodash',
+  },
   maxWorkers: '50%',
+  verbose: true,
 };

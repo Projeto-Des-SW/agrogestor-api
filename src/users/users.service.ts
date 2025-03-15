@@ -1,32 +1,53 @@
 import {
   ConflictException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
-import { prismaCatch } from 'src/util/prisma-catch';
+import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { IUsersRepository } from './users.repository.interface';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    @Inject(IUsersRepository)
+    private readonly usersRepository: IUsersRepository,
+  ) {}
 
   async create(createUserDto: CreateUserDto) {
-    return prismaCatch(() => this.prisma.user.create({ data: createUserDto }), {
-      P2002: new ConflictException(),
+    const existing = await this.usersRepository.findByUsername(
+      createUserDto.username,
+    );
+    if (existing) throw new ConflictException();
+    return this.usersRepository.create({
+      ...createUserDto,
+      password: await bcrypt.hash(createUserDto.password, 10),
     });
   }
 
-  async findOne(username: string) {
-    return this.prisma.user.findUnique({ where: { username } });
+  async findByUsername(username: string) {
+    return this.usersRepository.findByUsername(username);
   }
 
-  async update(username: string, updateUserDto: UpdateUserDto) {
-    return prismaCatch(
-      () =>
-        this.prisma.user.update({ where: { username }, data: updateUserDto }),
-      { P2025: new NotFoundException() },
-    );
+  async getById(id: number) {
+    const user = await this.usersRepository.findById(id);
+    if (!user) throw new NotFoundException();
+    return user;
+  }
+
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    await this.getById(id);
+    if (updateUserDto.username) {
+      const existing = await this.findByUsername(updateUserDto.username);
+      if (existing) throw new ConflictException();
+    }
+    return this.usersRepository.update(id, updateUserDto);
+  }
+
+  async delete(id: number) {
+    await this.getById(id);
+    return this.usersRepository.delete(id);
   }
 }

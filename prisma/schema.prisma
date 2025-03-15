@@ -8,8 +8,9 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  username String @unique
+  id       Int     @id @default(autoincrement())
+  disabled Boolean @default(false)
+  username String
   password String
   role     Role
   name     String
@@ -18,4 +19,19 @@ model User {
 enum Role {
   USER
   ADMIN
+}
+
+model Member {
+  id       Int     @id @default(autoincrement())
+  disabled Boolean @default(false)
+  name     String
+  group    Group   @relation(fields: [groupId], references: [id])
+  groupId  Int
+}
+
+model Group {
+  id       Int      @id @default(autoincrement())
+  disabled Boolean  @default(false)
+  name     String
+  members  Member[]
 }

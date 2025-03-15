@@ -1,38 +1,43 @@
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { Test } from '@nestjs/testing';
 import { Role } from '@prisma/client';
-import * as bcrypt from 'bcrypt';
-import { PrismaService } from 'src/prisma.service';
 import { UsersModule } from 'src/users/users.module';
-import { MockContext } from 'src/util/mock-context';
+import { IUsersRepository } from 'src/users/users.repository.interface';
+import { UsersRepositoryMock } from 'src/users/users.repository.mock';
+import { UsersService } from 'src/users/users.service';
+import { createJwtMock, JwtMock } from 'src/util/mock-context';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
+const exampleUser = {
+  username: 'user',
+  password: 'user',
+  role: Role.USER,
+  name: 'User',
+};
+
 describe('AuthService', () => {
-  let mock: MockContext;
+  let jwtMock: JwtMock;
+  let usersRepositoryMock: UsersRepositoryMock;
+  let usersService: UsersService;
   let service: AuthService;
-  const exampleUser = {
-    id: 1,
-    username: 'jhondoe',
-    password: 'password',
-    role: Role.USER,
-    name: 'Jhon Doe',
-  };
 
   beforeEach(async () => {
-    mock = new MockContext();
+    jwtMock = createJwtMock();
+    usersRepositoryMock = new UsersRepositoryMock();
     const module = await Test.createTestingModule({
       imports: [UsersModule, JwtModule],
       providers: [AuthService],
       controllers: [AuthController],
     })
-      .overrideProvider(PrismaService)
-      .useValue(mock.prisma)
+      .overrideProvider(IUsersRepository)
+      .useValue(usersRepositoryMock)
       .overrideProvider(JwtService)
-      .useValue(mock.jwt)
+      .useValue(jwtMock)
       .compile();
 
     service = module.get(AuthService);
+    usersService = module.get(UsersService);
   });
 
   it('should be defined', () => {
@@ -40,10 +45,7 @@ describe('AuthService', () => {
   });
 
   it('validate user', async () => {
-    mock.prisma.user.findUnique.mockResolvedValue({
-      ...exampleUser,
-      password: await bcrypt.hash(exampleUser.password, 10),
-    });
+    await usersService.create(exampleUser);
     const user = await service.validateUser(
       exampleUser.username,
       exampleUser.password,
@@ -52,7 +54,7 @@ describe('AuthService', () => {
   });
 
   it('login', () => {
-    mock.jwt.sign.mockReturnValue('');
+    jwtMock.sign.mockReturnValue('');
     const jwt = service.login(exampleUser);
     expect(jwt.access_token).toBeDefined();
   });

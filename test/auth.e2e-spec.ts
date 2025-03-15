@@ -20,7 +20,7 @@ describe('Auth controller (e2e)', () => {
   it('Login', async () => {
     const response = await request(app.getHttpServer())
       .post('/auth/login')
-      .send({ username: 'jhondoe', password: 'password' })
+      .send({ username: 'user', password: 'user' })
       .expect(201);
     expect(response.body.access_token).toBeDefined();
     return response;
@@ -29,7 +29,7 @@ describe('Auth controller (e2e)', () => {
   it('Login unauthorized', () => {
     return request(app.getHttpServer())
       .post('/auth/login')
-      .send({ username: 'jhondoe', password: 'drowssap' })
+      .send({ username: 'user', password: 'resu' })
       .expect(401);
   });
 });
