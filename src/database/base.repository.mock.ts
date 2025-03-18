@@ -1,10 +1,8 @@
 import { merge } from 'lodash-es';
-import { IBaseRepository } from './base.repository.interface';
 
 export abstract class BaseRepositoryMock<
   T extends { id: number; disabled?: boolean },
-> implements IBaseRepository<T>
-{
+> {
   data: T[] = [];
   nextId = 1;
 

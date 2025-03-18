@@ -8,13 +8,12 @@ import { Group, Member } from '@prisma/client';
 import { GroupsService } from 'src/groups/groups.service';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
-import { IMembersRepository } from './members.repository.interface';
+import { MembersRepository } from './members.repository';
 
 @Injectable()
 export class MembersService {
   constructor(
-    @Inject(IMembersRepository)
-    private readonly membersRepository: IMembersRepository,
+    private readonly membersRepository: MembersRepository,
     private readonly groupsService: GroupsService,
   ) {}
 

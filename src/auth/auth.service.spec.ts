@@ -2,7 +2,7 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { Test } from '@nestjs/testing';
 import { Role } from '@prisma/client';
 import { UsersModule } from 'src/users/users.module';
-import { IUsersRepository } from 'src/users/users.repository.interface';
+import { UsersRepository } from 'src/users/users.repository';
 import { UsersRepositoryMock } from 'src/users/users.repository.mock';
 import { UsersService } from 'src/users/users.service';
 import { createJwtMock, JwtMock } from 'src/util/mock-context';
@@ -30,7 +30,7 @@ describe('AuthService', () => {
       providers: [AuthService],
       controllers: [AuthController],
     })
-      .overrideProvider(IUsersRepository)
+      .overrideProvider(UsersRepository)
       .useValue(usersRepositoryMock)
       .overrideProvider(JwtService)
       .useValue(jwtMock)

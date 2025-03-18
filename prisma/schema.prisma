@@ -63,6 +63,7 @@ model ProductPrice {
 
 model SaleItem {
   id             Int          @id @default(autoincrement())
+  date           DateTime
   quantity       Int
   productPrice   ProductPrice @relation(fields: [productPriceId], references: [id])
   productPriceId Int

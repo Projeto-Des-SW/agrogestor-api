@@ -1,11 +1,7 @@
 import { Member } from '@prisma/client';
 import { BaseRepositoryMock } from 'src/database/base.repository.mock';
-import { IMembersRepository } from './members.repository.interface';
 
-export class MembersRepositoryMock
-  extends BaseRepositoryMock<Member>
-  implements IMembersRepository
-{
+export class MembersRepositoryMock extends BaseRepositoryMock<Member> {
   defaultProperties() {
     return { disabled: false };
   }

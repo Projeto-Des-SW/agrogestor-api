@@ -1,7 +1,7 @@
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { Role } from '@prisma/client';
-import { IUsersRepository } from './users.repository.interface';
+import { UsersRepository } from './users.repository';
 import { UsersRepositoryMock } from './users.repository.mock';
 import { UsersService } from './users.service';
 
@@ -25,11 +25,11 @@ describe('UsersService', () => {
   beforeEach(async () => {
     usersRepositoryMock = new UsersRepositoryMock();
     const module = await Test.createTestingModule({
-      providers: [
-        UsersService,
-        { provide: IUsersRepository, useValue: usersRepositoryMock },
-      ],
-    }).compile();
+      providers: [UsersService, UsersRepository],
+    })
+      .overrideProvider(UsersRepository)
+      .useValue(usersRepositoryMock)
+      .compile();
     service = module.get<UsersService>(UsersService);
   });
 

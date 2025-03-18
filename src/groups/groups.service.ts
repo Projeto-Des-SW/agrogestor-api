@@ -1,18 +1,14 @@
 import {
   ConflictException,
-  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { Group } from '@prisma/client';
-import { IGroupsRepository } from './groups.repository.interface';
+import { GroupsRepository } from './groups.repository';
 
 @Injectable()
 export class GroupsService {
-  constructor(
-    @Inject(IGroupsRepository)
-    private readonly groupsRepository: IGroupsRepository,
-  ) {}
+  constructor(private readonly groupsRepository: GroupsRepository) {}
 
   async create(name: string): Promise<Group> {
     const existing = await this.findByName(name);
@@ -26,6 +22,10 @@ export class GroupsService {
 
   async findByName(name: string): Promise<Group | null> {
     return this.groupsRepository.findByName(name);
+  }
+
+  async listAll() {
+    return this.groupsRepository.listAll();
   }
 
   async getById(id: number): Promise<Group> {

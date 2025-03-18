@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Member } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
-import { IMembersRepository } from './members.repository.interface';
 
 @Injectable()
-export class MembersRepository implements IMembersRepository {
+export class MembersRepository {
   constructor(private readonly databaseService: DatabaseService) {}
 
   async create(member: Omit<Member, 'id' | 'disabled'>) {

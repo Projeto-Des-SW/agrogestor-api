@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
-import { IUsersRepository } from './users.repository.interface';
 
 @Injectable()
-export class UsersRepository implements IUsersRepository {
+export class UsersRepository {
   constructor(private readonly databaseService: DatabaseService) {}
 
   async create(T: Omit<User, 'id' | 'disabled'>) {
