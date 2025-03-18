@@ -23,6 +23,10 @@ export class GroupsRepository implements IGroupsRepository {
     });
   }
 
+  listAll() {
+    return this.databaseService.group.findMany({ where: { disabled: false } });
+  }
+
   update(id: number, group: Partial<Group>) {
     return this.databaseService.group.update({ where: { id }, data: group });
   }

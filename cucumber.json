@@ -1,0 +1,7 @@
+{
+  "default": {
+    "requireModule": ["ts-node/register", "tsconfig-paths/register"],
+    "format": ["progress-bar"],
+    "require": ["features/**/*.ts"]
+  }
+}

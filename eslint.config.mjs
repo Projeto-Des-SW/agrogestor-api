@@ -7,7 +7,7 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
-    ignores: ['eslint.config.mjs'],
+    ignores: ['eslint.config.mjs', 'features/**/*'],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
@@ -34,6 +34,7 @@ export default tseslint.config(
       '@typescript-eslint/no-unsafe-argument': 'warn',
       '@typescript-eslint/unbound-method': 'off',
       '@typescript-eslint/require-await': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
       'jest/unbound-method': 'error',
       'jest/expect-expect': 'off',
     },

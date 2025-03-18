@@ -10,7 +10,7 @@ export class UsersRepositoryMock
     return { disabled: false };
   }
 
-  async findByUsername(username: string): Promise<User | null> {
+  findByUsername = jest.fn(async (username: string) => {
     return this.data.find((e) => e.username === username) ?? null;
-  }
+  });
 }

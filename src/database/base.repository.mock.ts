@@ -24,6 +24,10 @@ export abstract class BaseRepositoryMock<
     return this.data.find((e) => e.id === id) ?? null;
   });
 
+  listAll = jest.fn(async () => {
+    return this.data;
+  });
+
   update = jest.fn(async (id: number, T: Partial<T>) => {
     const i = this.data.findIndex((e) => e.id === id);
     this.data[i] = merge(this.data[i], T);

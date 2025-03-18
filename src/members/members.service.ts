@@ -33,7 +33,7 @@ export class MembersService {
     };
   }
 
-  async findByName(name: string): Promise<(Member & { group: Group }) | null> {
+  async findByName(name: string) {
     const member = await this.membersRepository.findByName(name);
     let group: Group | undefined;
     if (member) {
@@ -42,24 +42,25 @@ export class MembersService {
     return member && group ? { ...member, group } : null;
   }
 
-  async getById(id: number): Promise<Member & { group: Group }> {
+  async getById(id: number) {
     const member = await this.membersRepository.findById(id);
     if (!member) throw new NotFoundException();
     const group = await this.groupsService.getById(member.groupId);
     return { ...member, group };
   }
 
-  async getByName(name: string): Promise<Member & { group: Group }> {
+  async getByName(name: string) {
     const member = await this.membersRepository.findByName(name);
     if (!member) throw new NotFoundException();
     const group = await this.groupsService.getById(member.groupId);
     return { ...member, group };
   }
 
-  async update(
-    id: number,
-    { name, groupName }: UpdateMemberDto,
-  ): Promise<Member & { group: Group }> {
+  async listAll() {
+    return this.membersRepository.listAll();
+  }
+
+  async update(id: number, { name, groupName }: UpdateMemberDto) {
     const current = await this.getById(id);
 
     if (name) {
@@ -89,7 +90,7 @@ export class MembersService {
     };
   }
 
-  async delete(id: number): Promise<Member> {
+  async delete(id: number) {
     const current = await this.getById(id);
 
     const groupMembers = await this.membersRepository.listByGroupId(

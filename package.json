@@ -7,17 +7,17 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\" \"features/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "lint": "eslint \"{src,apps,libs,features}/**/*.ts\" --fix",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch --passWithNoTests",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --runInBand --config ./test/jest-e2e.config.ts",
+    "test:e2e": "cucumber-js",
     "prepare": "husky"
   },
   "dependencies": {
@@ -40,6 +40,7 @@
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
+    "@cucumber/cucumber": "^11.2.0",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
     "@nestjs/cli": "^11.0.0",
@@ -59,6 +60,7 @@
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-jest": "^28.11.0",
     "eslint-plugin-prettier": "^5.2.2",
+    "expect": "^29.7.0",
     "globals": "^15.14.0",
     "husky": "^9.1.7",
     "jest": "^29.7.0",
@@ -73,8 +75,5 @@
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.20.0"
-  },
-  "prisma": {
-    "seed": "ts-node prisma/seed.ts"
   }
 }

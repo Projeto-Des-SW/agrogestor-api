@@ -7,31 +7,38 @@ import { IMembersRepository } from './members.repository.interface';
 export class MembersRepository implements IMembersRepository {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  async create(member: Omit<Member, 'id' | 'disabled'>): Promise<Member> {
+  async create(member: Omit<Member, 'id' | 'disabled'>) {
     return this.databaseService.member.create({
       data: { name: member.name, group: { connect: { id: member.groupId } } },
     });
   }
 
-  async findById(id: number): Promise<Member | null> {
+  async findById(id: number) {
     return this.databaseService.member.findUnique({
       where: { id, disabled: false },
     });
   }
 
-  async findByName(name: string): Promise<Member | null> {
+  async findByName(name: string) {
     return this.databaseService.member.findFirst({
       where: { name, disabled: false },
     });
   }
 
-  listByGroupId(groupId: number): Promise<Member[]> {
+  listAll() {
+    return this.databaseService.member.findMany({
+      where: { disabled: false },
+      include: { group: true },
+    });
+  }
+
+  listByGroupId(groupId: number) {
     return this.databaseService.member.findMany({
       where: { groupId: groupId, disabled: false },
     });
   }
 
-  async update(id: number, member: Partial<Member>): Promise<Member> {
+  async update(id: number, member: Partial<Member>) {
     return this.databaseService.member.update({
       where: { id },
       data: {
@@ -42,7 +49,7 @@ export class MembersRepository implements IMembersRepository {
     });
   }
 
-  async delete(id: number): Promise<Member> {
+  async delete(id: number) {
     return this.update(id, { disabled: true });
   }
 }

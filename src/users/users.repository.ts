@@ -7,27 +7,31 @@ import { IUsersRepository } from './users.repository.interface';
 export class UsersRepository implements IUsersRepository {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  async create(T: Omit<User, 'id' | 'disabled'>): Promise<User> {
+  async create(T: Omit<User, 'id' | 'disabled'>) {
     return this.databaseService.user.create({ data: T });
   }
 
-  async findById(id: number): Promise<User | null> {
+  async findById(id: number) {
     return this.databaseService.user.findUnique({
       where: { id, disabled: false },
     });
   }
 
-  async findByUsername(username: string): Promise<User | null> {
+  async findByUsername(username: string) {
     return this.databaseService.user.findFirst({
       where: { username, disabled: false },
     });
   }
 
-  async update(id: number, T: Partial<User>): Promise<User> {
+  listAll() {
+    return this.databaseService.user.findMany({ where: { disabled: false } });
+  }
+
+  async update(id: number, T: Partial<User>) {
     return this.databaseService.user.update({ where: { id }, data: T });
   }
 
-  async delete(id: number): Promise<User> {
+  async delete(id: number) {
     return this.update(id, { disabled: true });
   }
 }

@@ -99,6 +99,20 @@ describe('MembersService', () => {
       const member = await service.findByName(member1);
       expect(member).toBeNull();
     });
+
+    it('should list all members', async () => {
+      const created1 = await service.create({
+        name: member1,
+        groupName: group1,
+      });
+      const created2 = await service.create({
+        name: member2,
+        groupName: group2,
+      });
+      const members = await service.listAll();
+      expect(members[0].id).toBe(created1.id);
+      expect(members[1].id).toBe(created2.id);
+    });
   });
 
   describe('when getting a member', () => {

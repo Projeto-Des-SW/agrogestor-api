@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Param,
   ParseIntPipe,
   Patch,
@@ -8,8 +9,10 @@ import {
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiConflictResponse,
   ApiCreatedResponse,
   ApiForbiddenResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -26,29 +29,66 @@ export class UsersController {
   @Post()
   @Roles(Role.ADMIN)
   @ApiCreatedResponse({
-    description: 'User successfully created',
+    example: {
+      name: 'User',
+      id: 1,
+      disabled: false,
+      username: 'user',
+      role: Role.USER,
+    },
   })
-  @ApiBadRequestResponse({
-    description: 'Body does not follow expected format',
-  })
-  @ApiUnauthorizedResponse({ description: 'User not logged in' })
-  @ApiForbiddenResponse({ description: 'Insufficient permissions' })
-  async createUser(@Body() createUserDto: CreateUserDto) {
-    await this.usersService.create(createUserDto);
+  @ApiConflictResponse()
+  @ApiBadRequestResponse()
+  @ApiUnauthorizedResponse()
+  @ApiForbiddenResponse()
+  async create(@Body() createUserDto: CreateUserDto) {
+    const { password, ...user } = await this.usersService.create(createUserDto);
+    return user;
   }
 
   @Patch(':id')
   @Roles(Role.ADMIN)
-  @ApiOkResponse({ description: 'User updated' })
-  @ApiBadRequestResponse({
-    description: 'Body does not follow expected format',
+  @ApiOkResponse({
+    example: {
+      name: 'User',
+      id: 1,
+      disabled: false,
+      username: 'user',
+      role: Role.USER,
+    },
   })
-  @ApiUnauthorizedResponse({ description: 'User not logged in' })
-  @ApiForbiddenResponse({ description: 'Insufficient permissions' })
-  async updateUser(
+  @ApiConflictResponse()
+  @ApiNotFoundResponse()
+  @ApiBadRequestResponse()
+  @ApiUnauthorizedResponse()
+  @ApiForbiddenResponse()
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    await this.usersService.update(id, updateUserDto);
+    const { password, ...user } = await this.usersService.update(
+      id,
+      updateUserDto,
+    );
+    return user;
+  }
+
+  @Delete(':id')
+  @Roles(Role.ADMIN)
+  @ApiOkResponse({
+    example: {
+      name: 'User',
+      id: 1,
+      disabled: false,
+      username: 'user',
+      role: Role.USER,
+    },
+  })
+  @ApiNotFoundResponse()
+  @ApiUnauthorizedResponse()
+  @ApiForbiddenResponse()
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    const { password, ...user } = await this.usersService.delete(id);
+    return user;
   }
 }
