@@ -9,6 +9,12 @@ import { GroupsRepository } from './groups.repository';
 @Injectable()
 export class GroupsService {
   constructor(private readonly groupsRepository: GroupsRepository) {}
+  
+  async create(name: string): Promise<Group> {
+    const existing = await this.findByName(name);
+    if (existing) throw new ConflictException();
+    return this.groupsRepository.create({ name });
+  }
 
   async findById(id: number): Promise<Group | null> {
     return this.groupsRepository.findById(id);
@@ -16,6 +22,10 @@ export class GroupsService {
 
   async findByName(name: string): Promise<Group | null> {
     return this.groupsRepository.findByName(name);
+  }
+
+  async listAll() {
+    return this.groupsRepository.listAll();
   }
 
   async getById(id: number): Promise<Group> {
