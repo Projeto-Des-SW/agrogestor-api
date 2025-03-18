@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
 } from '@nestjs/common';
@@ -73,7 +72,7 @@ export class MembersController {
   })
   @ApiNotFoundResponse()
   @ApiUnauthorizedResponse()
-  getById(@Param('id', ParseIntPipe) id: number) {
+  getById(@Param('id') id: number) {
     return this.membersService.getById(id);
   }
 
@@ -83,10 +82,7 @@ export class MembersController {
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiUnauthorizedResponse()
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateMemberDto: UpdateMemberDto,
-  ) {
+  update(@Param('id') id: number, @Body() updateMemberDto: UpdateMemberDto) {
     return this.membersService.update(id, updateMemberDto);
   }
 
@@ -94,7 +90,7 @@ export class MembersController {
   @ApiOkResponse()
   @ApiNotFoundResponse()
   @ApiUnauthorizedResponse()
-  delete(@Param('id', ParseIntPipe) id: number) {
+  delete(@Param('id') id: number) {
     return this.membersService.delete(id);
   }
 }

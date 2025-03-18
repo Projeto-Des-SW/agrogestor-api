@@ -1,5 +1,4 @@
-Feature: Logging in
-    The user should be able to authenticate using username and password
+Feature: Auth
 
   Background:
     Given there is an user named "User" with username "user", password "user" and role "USER"

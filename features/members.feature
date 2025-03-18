@@ -1,11 +1,9 @@
-Feature: Listing members
-
-  Background:
-    Given there is an user named "User" with username "user", password "user" and role "USER"
-    And the user logs in with username "user" and password "user"
+Feature: Members
 
   Scenario: There are members
-    Given the following members exist:
+    Given there is an user named "User" with username "user", password "user" and role "USER"
+    And the user logs in with username "user" and password "user"
+    And the following members exist:
       | name    | groupName |
       | Member1 | Group1    |
       | Member2 | Group1    |

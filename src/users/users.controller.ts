@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Param,
-  ParseIntPipe,
-  Patch,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
@@ -62,10 +54,7 @@ export class UsersController {
   @ApiBadRequestResponse()
   @ApiUnauthorizedResponse()
   @ApiForbiddenResponse()
-  async update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
+  async update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
     const { password, ...user } = await this.usersService.update(
       id,
       updateUserDto,
@@ -87,7 +76,7 @@ export class UsersController {
   @ApiNotFoundResponse()
   @ApiUnauthorizedResponse()
   @ApiForbiddenResponse()
-  async delete(@Param('id', ParseIntPipe) id: number) {
+  async delete(@Param('id') id: number) {
     const { password, ...user } = await this.usersService.delete(id);
     return user;
   }

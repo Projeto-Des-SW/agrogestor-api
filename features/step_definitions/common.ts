@@ -37,3 +37,11 @@ Then(
     expect(this.response.body).toEqual(expected);
   },
 );
+
+Then(
+  'the response body should be an array containing:',
+  function (this: E2EWorld, dataTable: DataTable) {
+    const expected = dataTable.rows().map((row) => autoJson(row[0]));
+    expect(this.response.body).toEqual(expected);
+  },
+);
