@@ -1,11 +1,7 @@
 import { Group } from '@prisma/client';
 import { BaseRepositoryMock } from 'src/database/base.repository.mock';
-import { IGroupsRepository } from './groups.repository.interface';
 
-export class GroupsRepositoryMock
-  extends BaseRepositoryMock<Group>
-  implements IGroupsRepository
-{
+export class GroupsRepositoryMock extends BaseRepositoryMock<Group> {
   defaultProperties() {
     return { disabled: false };
   }

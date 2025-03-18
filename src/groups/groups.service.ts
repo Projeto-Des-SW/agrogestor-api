@@ -1,24 +1,14 @@
 import {
   ConflictException,
-  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { Group } from '@prisma/client';
-import { IGroupsRepository } from './groups.repository.interface';
+import { GroupsRepository } from './groups.repository';
 
 @Injectable()
 export class GroupsService {
-  constructor(
-    @Inject(IGroupsRepository)
-    private readonly groupsRepository: IGroupsRepository,
-  ) {}
-
-  async create(name: string): Promise<Group> {
-    const existing = await this.findByName(name);
-    if (existing) throw new ConflictException();
-    return this.groupsRepository.create({ name });
-  }
+  constructor(private readonly groupsRepository: GroupsRepository) {}
 
   async findById(id: number): Promise<Group | null> {
     return this.groupsRepository.findById(id);

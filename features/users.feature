@@ -1,5 +1,4 @@
-Feature: Creating an user
-    Admins should be able to create users
+Feature: Users
 
   Scenario: An unauthenticated user attempts to create an user
     Given the user is not logged in

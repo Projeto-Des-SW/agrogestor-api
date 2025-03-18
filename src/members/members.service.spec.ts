@@ -1,9 +1,9 @@
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { GroupsModule } from 'src/groups/groups.module';
-import { IGroupsRepository } from 'src/groups/groups.repository.interface';
+import { GroupsRepository } from 'src/groups/groups.repository';
 import { GroupsRepositoryMock } from 'src/groups/groups.repository.mock';
-import { IMembersRepository } from './members.repository.interface';
+import { MembersRepository } from './members.repository';
 import { MembersRepositoryMock } from './members.repository.mock';
 import { MembersService } from './members.service';
 
@@ -22,12 +22,11 @@ describe('MembersService', () => {
     groupsRepositoryMock = new GroupsRepositoryMock();
     const module = await Test.createTestingModule({
       imports: [GroupsModule],
-      providers: [
-        MembersService,
-        { provide: IMembersRepository, useValue: membersRepositoryMock },
-      ],
+      providers: [MembersService, MembersRepository],
     })
-      .overrideProvider(IGroupsRepository)
+      .overrideProvider(MembersRepository)
+      .useValue(membersRepositoryMock)
+      .overrideProvider(GroupsRepository)
       .useValue(groupsRepositoryMock)
       .compile();
     service = module.get(MembersService);

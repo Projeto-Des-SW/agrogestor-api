@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Group } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
-import { IGroupsRepository } from './groups.repository.interface';
 
 @Injectable()
-export class GroupsRepository implements IGroupsRepository {
+export class GroupsRepository {
   constructor(private readonly databaseService: DatabaseService) {}
 
   create(group: Omit<Group, 'id' | 'disabled'>) {
