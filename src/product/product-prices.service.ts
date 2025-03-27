@@ -9,13 +9,21 @@ export class ProductPricesService {
   ) {}
 
   async getProductPriceOrCreate(productPrice: Omit<ProductPrice, 'id'>) {
-    let price =
+    const price =
       await this.productPricesRepository.findProductPrice(productPrice);
-    if (!price) price = await this.productPricesRepository.create(productPrice);
+    if (!price) return this.productPricesRepository.create(productPrice);
     return price;
   }
 
-  findLatestByProduct(productId: number) {
-    return this.productPricesRepository.findLatestByProduct(productId);
+  findManyLatestByProductDateAndMemberName(
+    product: string,
+    date: Date,
+    memberName: string,
+  ) {
+    return this.productPricesRepository.findManyLatestByProductDateAndMemberName(
+      product,
+      date,
+      memberName,
+    );
   }
 }

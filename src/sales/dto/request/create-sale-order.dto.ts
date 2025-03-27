@@ -5,6 +5,7 @@ import {
   IsArray,
   IsDate,
   IsInt,
+  IsString,
   ValidateNested,
 } from 'class-validator';
 import { CreateSaleItemDto } from './create-sale-item.dto';
@@ -16,8 +17,8 @@ export class CreateSaleOrderDto {
   date: Date;
 
   @ApiProperty()
-  @IsInt()
-  memberId: number;
+  @IsString()
+  memberName: string;
 
   @ApiProperty({ type: [CreateSaleItemDto] })
   @IsArray()

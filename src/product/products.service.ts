@@ -6,8 +6,8 @@ export class ProductsService {
   constructor(private readonly productsRepository: ProductsRepository) {}
 
   async getByNameOrCreate(name: string) {
-    let product = await this.productsRepository.findByName(name);
-    if (!product) product = await this.productsRepository.create(name);
+    const product = await this.productsRepository.findByName(name);
+    if (!product) return this.productsRepository.create(name);
     return product;
   }
 

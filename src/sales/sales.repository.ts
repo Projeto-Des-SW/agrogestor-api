@@ -87,6 +87,7 @@ export class SalesRepository {
         date,
         member: { connect: { id: memberId } },
         saleItems: {
+          deleteMany: items ? {} : undefined,
           create: items?.map((item) => ({
             quantity: item.quantity,
             productPrice: { connect: { id: item.productPriceId } },

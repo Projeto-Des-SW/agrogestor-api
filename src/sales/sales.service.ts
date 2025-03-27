@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Member } from '@prisma/client';
 import { MembersService } from 'src/members/members.service';
 import { ProductPricesService } from 'src/product/product-prices.service';
 import { ProductsService } from 'src/product/products.service';
@@ -17,7 +16,7 @@ export class SalesService {
     private readonly productPricesService: ProductPricesService,
   ) {}
 
-  async convertDtoToSaleItem(member: Member, dto: CreateSaleItemDto[]) {
+  async convertDtoToSaleItem(groupId: number, dto: CreateSaleItemDto[]) {
     const items: { quantity: number; productPriceId: number }[] = [];
     for (const item of dto) {
       const product = await this.productsService.getByNameOrCreate(
@@ -26,7 +25,7 @@ export class SalesService {
       const price = await this.productPricesService.getProductPriceOrCreate({
         date: item.date,
         price: item.price,
-        groupId: member.groupId,
+        groupId,
         productId: product.id,
       });
       items.push({
@@ -37,12 +36,15 @@ export class SalesService {
     return items;
   }
 
-  async create({ date, items, memberId }: CreateSaleOrderDto) {
-    const member = await this.membersService.getById(memberId);
+  async create({ date, items, memberName }: CreateSaleOrderDto) {
+    const member = await this.membersService.getOrCreate({
+      name: memberName,
+      groupName: 'Outros',
+    });
     return this.saleOrdersRepository.create({
       date,
       memberId: member.id,
-      items: await this.convertDtoToSaleItem(member, items),
+      items: await this.convertDtoToSaleItem(member.groupId, items),
     });
   }
 
@@ -72,13 +74,22 @@ export class SalesService {
     );
   }
 
-  async update(id: number, { date, memberId, items }: UpdateSaleOrderDto) {
+  async update(id: number, { date, memberName, items }: UpdateSaleOrderDto) {
     const sale = await this.getById(id);
-    const member = await this.membersService.getById(memberId ?? sale.memberId);
+
+    const member = memberName
+      ? await this.membersService.getOrCreate({
+          name: memberName,
+          groupName: 'Outros',
+        })
+      : await this.membersService.getById(sale.memberId);
+
     return this.saleOrdersRepository.update(id, {
       date,
-      memberId,
-      items: items ? await this.convertDtoToSaleItem(member, items) : undefined,
+      memberId: member.id,
+      items: items
+        ? await this.convertDtoToSaleItem(member.groupId, items)
+        : undefined,
     });
   }
 

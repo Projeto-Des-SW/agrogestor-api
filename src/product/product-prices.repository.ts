@@ -23,9 +23,17 @@ export class ProductPricesRepository {
     });
   }
 
-  findLatestByProduct(productId: number) {
-    return this.databaseService.productPrice.findFirst({
-      where: { productId },
+  async findManyLatestByProductDateAndMemberName(
+    product: string,
+    date: Date,
+    memberName: string,
+  ) {
+    return await this.databaseService.productPrice.findFirst({
+      where: {
+        product: { name: product },
+        group: { members: { some: { name: memberName } } },
+        date: { lt: date },
+      },
       orderBy: { date: 'desc' },
     });
   }

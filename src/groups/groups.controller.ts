@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { ApiOkResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { GroupsService } from './groups.service';
 
-@Controller()
+@Controller('groups')
 export class GroupsController {
   constructor(private readonly groupsService: GroupsService) {}
 

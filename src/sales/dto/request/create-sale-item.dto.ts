@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Prisma } from '@prisma/client';
 import { Type } from 'class-transformer';
-import { IsDate, IsDecimal, IsInt, IsString } from 'class-validator';
+import { IsDate, IsInt, IsNumber, IsString } from 'class-validator';
 
 export class CreateSaleItemDto {
   @ApiProperty()
@@ -14,8 +13,8 @@ export class CreateSaleItemDto {
   quantity: number;
 
   @ApiProperty({ type: String })
-  @IsDecimal()
-  price: Prisma.Decimal;
+  @IsNumber()
+  price: number;
 
   @ApiProperty()
   @IsString()

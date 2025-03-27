@@ -28,7 +28,7 @@ export class SaleOrderFullDto {
             id: { type: 'number' },
             groupId: { type: 'number' },
             date: { type: 'string' },
-            price: { type: 'string' },
+            price: { type: 'number' },
             productId: { type: 'number' },
             product: {
               type: 'object',

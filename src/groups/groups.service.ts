@@ -9,7 +9,7 @@ import { GroupsRepository } from './groups.repository';
 @Injectable()
 export class GroupsService {
   constructor(private readonly groupsRepository: GroupsRepository) {}
-  
+
   async create(name: string): Promise<Group> {
     const existing = await this.findByName(name);
     if (existing) throw new ConflictException();
@@ -35,10 +35,8 @@ export class GroupsService {
   }
 
   async getByNameOrCreate(name: string): Promise<Group> {
-    let group = await this.groupsRepository.findByName(name);
-    if (!group) {
-      group = await this.groupsRepository.create({ name });
-    }
+    const group = await this.groupsRepository.findByName(name);
+    if (!group) return this.groupsRepository.create({ name });
     return group;
   }
 

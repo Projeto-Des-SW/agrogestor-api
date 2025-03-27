@@ -54,6 +54,12 @@ export class MembersService {
     return { ...member, group };
   }
 
+  async getOrCreate(createMemberDto: CreateMemberDto) {
+    const member = await this.findByName(createMemberDto.name);
+    if (!member) return this.create(createMemberDto);
+    return member;
+  }
+
   async listAll() {
     return this.membersRepository.listAll();
   }
