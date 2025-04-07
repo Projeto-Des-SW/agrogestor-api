@@ -8,6 +8,7 @@ import { DatabaseModule } from './database/database.module';
 import { GroupsModule } from './groups/groups.module';
 import { MembersModule } from './members/members.module';
 import { ProductsModule } from './product/products.module';
+import { ProductionLogsModule } from './production-log/production-logs.module';
 import { SalesModule } from './sales/sales.module';
 import { UsersModule } from './users/users.module';
 
@@ -21,6 +22,7 @@ import { UsersModule } from './users/users.module';
     MembersModule,
     ProductsModule,
     SalesModule,
+    ProductionLogsModule,
   ],
   providers: [
     {

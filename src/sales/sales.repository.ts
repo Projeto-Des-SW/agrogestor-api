@@ -45,7 +45,9 @@ export class SalesRepository {
   }
 
   listAll() {
-    return this.databaseService.saleOrder.findMany();
+    return this.databaseService.saleOrder.findMany({
+      orderBy: { date: 'desc' },
+    });
   }
 
   listFull(
@@ -66,6 +68,7 @@ export class SalesRepository {
           include: { productPrice: { include: { product: true } } },
         },
       },
+      orderBy: { date: 'desc' },
     });
   }
 

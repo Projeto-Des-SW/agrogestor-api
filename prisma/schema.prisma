@@ -22,12 +22,13 @@ enum Role {
 }
 
 model Member {
-  id         Int         @id @default(autoincrement())
-  disabled   Boolean     @default(false)
-  name       String
-  group      Group       @relation(fields: [groupId], references: [id])
-  groupId    Int
-  saleOrders SaleOrder[]
+  id             Int             @id @default(autoincrement())
+  disabled       Boolean         @default(false)
+  name           String
+  group          Group           @relation(fields: [groupId], references: [id])
+  groupId        Int
+  saleOrders     SaleOrder[]
+  productionLogs ProductionLog[]
 
   @@index([groupId])
 }
@@ -79,6 +80,33 @@ model SaleOrder {
   saleItems SaleItem[]
   member    Member     @relation(fields: [memberId], references: [id])
   memberId  Int
+
+  @@index([memberId])
+}
+
+enum Period {
+  MORNING
+  AFTERNOON
+}
+
+model ProductionEntry {
+  id              Int           @id @default(autoincrement())
+  date            DateTime
+  period          Period
+  quantity        Int
+  price           Float
+  productionLog   ProductionLog @relation(fields: [productionLogId], references: [id])
+  productionLogId Int
+
+  @@index([productionLogId])
+}
+
+model ProductionLog {
+  id                Int               @id @default(autoincrement())
+  date              DateTime
+  productionEntries ProductionEntry[]
+  member            Member            @relation(fields: [memberId], references: [id])
+  memberId          Int
 
   @@index([memberId])
 }

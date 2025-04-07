@@ -2,6 +2,12 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Member, Product, ProductPrice, SaleItem } from '@prisma/client';
 
 export class SaleOrderFullDto {
+  @ApiProperty()
+  id: number;
+
+  @ApiProperty()
+  date: Date;
+
   @ApiProperty({
     type: 'object',
     properties: {
