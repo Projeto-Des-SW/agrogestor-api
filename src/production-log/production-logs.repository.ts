@@ -1,6 +1,8 @@
+import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import { CreateProductionEntryDto } from './dto/request/create-production-entry.dto';
 
+@Injectable()
 export class ProductionLogsRepository {
   constructor(private readonly databaseService: DatabaseService) {}
 
