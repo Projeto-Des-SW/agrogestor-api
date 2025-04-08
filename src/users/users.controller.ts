@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
@@ -78,6 +86,55 @@ export class UsersController {
   @ApiForbiddenResponse()
   async delete(@Param('id') id: number) {
     const { password, ...user } = await this.usersService.delete(id);
+    return user;
+  }
+
+  @Get()
+  @Roles(Role.ADMIN)
+  @ApiOkResponse({
+    description: 'Lista de usuários',
+    schema: {
+      example: [
+        {
+          name: 'Admin',
+          id: 1,
+          disabled: false,
+          username: 'admin',
+          role: Role.ADMIN,
+        },
+        {
+          name: 'User',
+          id: 2,
+          disabled: false,
+          username: 'user',
+          role: Role.USER,
+        },
+      ],
+    },
+  })
+  @ApiUnauthorizedResponse()
+  @ApiForbiddenResponse()
+  async findAll() {
+    const users = await this.usersService.findAll();
+    return users.map(({ password, ...user }) => user);
+  }
+
+  @Get(':id')
+  @Roles(Role.ADMIN)
+  @ApiOkResponse({
+    example: {
+      name: 'User',
+      id: 1,
+      disabled: false,
+      username: 'user',
+      role: Role.USER,
+    },
+  })
+  @ApiNotFoundResponse()
+  @ApiUnauthorizedResponse()
+  @ApiForbiddenResponse()
+  async findOne(@Param('id') id: number) {
+    const { password, ...user } = await this.usersService.getById(id);
     return user;
   }
 }
