@@ -67,7 +67,7 @@ export class MembersService {
   async update(id: number, { name, groupName }: UpdateMemberDto) {
     const current = await this.getById(id);
 
-    if (name) {
+    if (name && name !== current.name) {
       const existing = await this.membersRepository.findByName(name);
       if (existing) throw new ConflictException();
     }
