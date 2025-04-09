@@ -46,4 +46,8 @@ export class UsersService {
     await this.getById(id);
     return this.usersRepository.delete(id);
   }
+
+  async findAll() {
+    return this.usersRepository.listAll();
+  }
 }
