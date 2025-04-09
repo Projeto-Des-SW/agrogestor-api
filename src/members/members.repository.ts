@@ -43,7 +43,7 @@ export class MembersRepository {
       data: {
         name: member.name,
         disabled: member.disabled,
-        group: { connect: { id: member.groupId } },
+        group: member.groupId ? { connect: { id: member.groupId } } : undefined,
       },
     });
   }
