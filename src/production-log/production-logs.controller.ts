@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseDatePipe,
   Patch,
   Post,
   Query,
@@ -45,8 +46,8 @@ export class ProductionLogsController {
   @ApiUnauthorizedResponse({ description: 'User must be logged in' })
   list(
     @Query('memberId') memberId?: number,
-    @Query('startDate') startDate?: Date,
-    @Query('endDate') endDate?: Date,
+    @Query('startDate', new ParseDatePipe({ optional: true })) startDate?: Date,
+    @Query('endDate', new ParseDatePipe({ optional: true })) endDate?: Date,
   ) {
     return this.productionLogsService.listFull(memberId, startDate, endDate);
   }

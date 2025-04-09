@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseDatePipe,
   Patch,
   Post,
   Query,
@@ -45,8 +46,8 @@ export class SalesController {
   list(
     @Query('memberId') memberId?: number,
     @Query('groupId') groupId?: number,
-    @Query('startDate') startDate?: Date,
-    @Query('endDate') endDate?: Date,
+    @Query('startDate', new ParseDatePipe({ optional: true })) startDate?: Date,
+    @Query('endDate', new ParseDatePipe({ optional: true })) endDate?: Date,
   ) {
     return this.saleOrdersService.listFull(
       memberId,

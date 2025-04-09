@@ -34,10 +34,13 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    await this.getById(id);
-    if (updateUserDto.username) {
+    const current = await this.getById(id);
+    if (updateUserDto.username && current.username !== updateUserDto.username) {
       const existing = await this.findByUsername(updateUserDto.username);
       if (existing) throw new ConflictException();
+    }
+    if (updateUserDto.password) {
+      updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
     }
     return this.usersRepository.update(id, updateUserDto);
   }

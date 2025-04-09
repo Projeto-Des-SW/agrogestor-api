@@ -12,12 +12,6 @@ async function main() {
       name: 'Admin',
     },
   });
-  const member = await prisma.member.create({
-    data: {
-      name: 'Member',
-      group: { create: { name: 'Group' } },
-    },
-  });
 }
 
 main()

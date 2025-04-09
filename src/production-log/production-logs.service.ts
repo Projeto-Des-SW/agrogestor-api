@@ -36,6 +36,7 @@ export class ProductionLogsService {
   }
 
   async listFull(memberId?: number, startDate?: Date, endDate?: Date) {
+    endDate?.setDate(endDate.getDate() + 1);
     return this.productionLogsRepository.listFull(memberId, startDate, endDate);
   }
 

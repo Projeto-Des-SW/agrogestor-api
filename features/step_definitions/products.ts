@@ -16,5 +16,4 @@ When('the user requests all products', async function (this: E2EWorld) {
   this.response = await this.request
     .get('/products')
     .auth(this.accessToken, { type: 'bearer' });
-  console.log(this.response.body);
 });

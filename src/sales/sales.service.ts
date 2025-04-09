@@ -66,6 +66,7 @@ export class SalesService {
     startDate?: Date,
     endDate?: Date,
   ) {
+    endDate?.setDate(endDate.getDate() + 1);
     return this.saleOrdersRepository.listFull(
       memberId,
       groupId,
