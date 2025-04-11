@@ -95,7 +95,7 @@ model ProductionEntry {
   period          Period
   quantity        Int
   price           Float
-  productionLog   ProductionLog @relation(fields: [productionLogId], references: [id])
+  productionLog   ProductionLog @relation(fields: [productionLogId], references: [id], onDelete: Cascade)
   productionLogId Int
 
   @@index([productionLogId])

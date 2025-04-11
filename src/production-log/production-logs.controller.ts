@@ -24,7 +24,6 @@ import { ProductionLogsService } from './production-logs.service';
 
 @Controller('productionLog')
 export class ProductionLogsController {
-  saleOrdersService: any;
   constructor(private readonly productionLogsService: ProductionLogsService) {}
 
   @Post()
